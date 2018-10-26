@@ -42,13 +42,31 @@ class FilesSpider(scrapy.Spider):
 
 	# Just go into 'Raw file page' to get content
 	def file(self, response):
-		content_url = self.url_github+response.css('div.file-actions a.BtnGroup-item').xpath('@href').extract_first()
-		yield scrapy.Request(content_url, callback=self.parse_raw_file)
+		
+		# Get info
+		repository_url = response.url.split('blob',1)[0]
+		file_name      = response.css('strong.final-path ::text').extract_first()
+		
+		# Prepare request
+		raw_url = response.css('div.file-actions a.BtnGroup-item').xpath('@href').extract_first()
+		if ( raw_url != None ):
+			content_url = self.url_github+raw_url
+			request = scrapy.Request(content_url, callback=self.parse_raw_file)
+
+			request.meta['repository_url'] = repository_url
+			request.meta['file_name']      = file_name
+			request.meta['file_url']       = response.url
+			yield request
 
 
 	# Build item
-	def parse_raw_file(self, response):
+	def parse_raw_file(self, response,):
 		file = GitcodexcrawlerItem()
-		file['file_url'] = response.url
-		file['file_content'] = str(response.css('p ::text').extract_first())
+		file['repository_url'] = response.meta['repository_url']
+		file['file_name']      = response.meta['file_name']
+		file['file_url']       = response.meta['file_url']
+		try:
+			file['file_content'] = str(response.css('p ::text').extract_first().encode('utf-8'))
+		except (AttributeError):
+			file['file_content'] = str(response.body)[2:]
 		yield file

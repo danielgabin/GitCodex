@@ -9,5 +9,7 @@ import scrapy
 
 
 class GitcodexcrawlerItem(scrapy.Item):
-    file_content = scrapy.Field()
-    file_url = scrapy.Field()
+	repository_url = scrapy.Field()
+	file_name      = scrapy.Field()
+	file_content   = scrapy.Field()
+	file_url       = scrapy.Field()
