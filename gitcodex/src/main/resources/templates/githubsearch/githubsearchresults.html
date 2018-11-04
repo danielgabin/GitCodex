@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}">Welcome!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!--     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" /> -->
+<!--     <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script> -->
+<!--     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script> -->
+</head>
+<body>
+<!-- <div th:replace="fragments/layout :: header"></div> -->
+
+<div class="container">
+
+    <h2>Results on github</h2>
+    
+    <!-- List of polls -->
+    <div class="list-group col-xs-12">
+    	<a th:each="file: ${filePage}" 
+    	   th:href="@{/githubsearch}" 
+    	   class="list-group-item col-xs-12">
+    		<span class="col-xs-6" th:text="${file.getName()}"></span>
+			<span class="col-xs-4" th:text="${file.getRepositoryName()}"></span>
+			<span class="col-xs-2" th:text="${file.getUrl()}"></span>
+		</a>
+    </div>
+
+       	<!-- Pagination Bar -->
+<!-- 		<div th:if="${not #lists.isEmpty(filePage)}"> -->
+<!-- 			<div class="text-center"> -->
+<!-- 				<nav aria-label="Page navigation"> -->
+<!-- 					<ul class="pagination"> -->
+<!-- 						<li -->
+<!-- 							th:class="${not filePage.hasPrevious()}? 'disabled page-item' : 'page-item'"> -->
+<!-- 							<span th:if='${not filePage.hasPrevious()}'>&laquo;</span> <a -->
+<!-- 							class="page-link" th:if='${filePage.hasPrevious()}' -->
+<!-- 							th:href="@{/polls(groupId=${param.groupId}, -->
+<!-- 			        				page=(${filePage.getNumber()}-1))}" -->
+<!-- 							title="Go to previous page">&laquo;</a> -->
+<!-- 						</li> -->
+<!-- 						<li th:each="i : ${#numbers.sequence(1, filePage.getTotalPages())}" -->
+<!-- 							th:class="${i == (filePage.getNumber()+1)}? 'active page-item' : 'page-item'"> -->
+<!-- 							<span th:if='${i == (filePage.getNumber()+1)}' th:text='${i}'>1</span> -->
+<!-- 							<a class="page-link" -->
+<!-- 							th:if='${not (i == (filePage.getNumber()+1))}' -->
+<!-- 							th:href="@{/polls(groupId=${param.groupId}, -->
+<!-- 			       				page=(${i}-1))}"> -->
+<!-- 								<span th:text='${i}'>1</span> -->
+<!-- 						</a> -->
+<!-- 						</li> -->
+<!-- 						<li -->
+<!-- 							th:class="${filePage.hasNext()}? 'page-item' : 'disabled page-item'"> -->
+<!-- 							<span th:if='${not filePage.hasNext()}'>&raquo;</span> <a -->
+<!-- 							class="page-link" th:if='${filePage.hasNext()}' -->
+<!-- 							th:href="@{/polls(groupId=${param.groupId}, -->
+<!-- 			        				page=(${filePage.getNumber()}+1))}" -->
+<!-- 							title='Go to next page'>&raquo;</a> -->
+<!-- 						</li> -->
+<!-- 					</ul> -->
+<!-- 				</nav> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+    
+<!--     <div th:replace="fragments/layout :: footer"></div> -->
+</div>
+</body>
+</html>
