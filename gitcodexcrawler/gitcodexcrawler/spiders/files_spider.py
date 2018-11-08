@@ -9,7 +9,7 @@ class FilesSpider(scrapy.Spider):
 		'https://github.com/search?l=&p=1&q=language%3APython&ref=advsearch&type=Repositories'
 	]
 	page = 1
-	total_pages = 1
+	total_pages = 10
 
 
 	# Github search results page
@@ -19,15 +19,15 @@ class FilesSpider(scrapy.Spider):
 			repository_url_list = response.css('a.v-align-middle').xpath('@href').extract()
 			for repository_url in repository_url_list:
 				yield scrapy.Request(self.url_github+repository_url, callback=self.directory)
-			
+
 			# Crawl next page
 			self.page += 1
 			yield scrapy.Request(self.start_urls[0].replace('p=1','p='+str(self.page)), callback=self.parse)
 
 
-	# Directory page inside concrete repository 
+	# Directory page inside concrete repository
 	def directory(self, response):
-		
+
 		# Each item inside directory
 		for item in response.css('table.files tr.js-navigation-item'):
 			# Crawl into a directory
@@ -38,15 +38,15 @@ class FilesSpider(scrapy.Spider):
 			else:
 				file_url = self.url_github+item.css('a.js-navigation-open').xpath('@href').extract_first()
 				yield scrapy.Request(file_url, callback=self.file)
-		
+
 
 	# Just go into 'Raw file page' to get content
 	def file(self, response):
-		
+
 		# Get info
 		repository_url = response.url.split('blob',1)[0]
 		file_name      = response.css('strong.final-path ::text').extract_first()
-		
+
 		# Prepare request
 		raw_url = response.css('div.file-actions a.BtnGroup-item').xpath('@href').extract_first()
 		if ( raw_url != None ):

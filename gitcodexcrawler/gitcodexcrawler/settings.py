@@ -75,8 +75,13 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'gitcodexcrawler.pipelines.GitcodexcrawlerPipeline': 300,
+    #'scrapyelasticsearch.scrapyelasticsearch.ElasticSearchPipeline': 500
+    'gitcodexcrawler.pipelines.GitcodexcrawlerPipeline': 300
 }
+
+#ELASTICSEARCH_SERVERS = ['localhost']
+#ELASTICSEARCH_INDEX = 'filestest'
+#ELASTICSEARCH_TYPE = 'filestest'
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
