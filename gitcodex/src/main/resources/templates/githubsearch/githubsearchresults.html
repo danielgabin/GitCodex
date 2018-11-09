@@ -20,9 +20,9 @@
     	<a th:each="file: ${filePage}" 
     	   th:href="@{/githubsearch}" 
     	   class="list-group-item col-xs-12">
-    		<span class="col-xs-6" th:text="${file.getName()}"></span>
-			<span class="col-xs-4" th:text="${file.getRepositoryName()}"></span>
-			<span class="col-xs-2" th:text="${file.getUrl()}"></span>
+    		<span class="col-xs-6" th:text="${file.getFile_name()}"></span>
+			<span class="col-xs-4" th:text="${file.getRepository_url()}"></span>
+			<span class="col-xs-2" th:text="${file.getFile_url()}"></span>
 		</a>
     </div>
 

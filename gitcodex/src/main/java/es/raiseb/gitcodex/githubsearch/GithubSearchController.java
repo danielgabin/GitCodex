@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import es.raiseb.gitcodex.file.File;
+import es.raiseb.gitcodex.file.CodeFile;
 
 @Controller
 public class GithubSearchController {
@@ -15,7 +15,7 @@ public class GithubSearchController {
 
 	@GetMapping("/githubsearch")
 	public String githubSearch(Model model) {
-		File mockFile = new File("", "", "");
+		CodeFile mockFile = new CodeFile("", "", "", "", "");
 		model.addAttribute("filePage", githubSearchService.searchOnGithub(mockFile));
 		return "githubsearch/githubsearchresults";
 	}
