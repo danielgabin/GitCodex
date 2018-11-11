@@ -1,5 +1,7 @@
 package es.raiseb.gitcodex;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
 import org.junit.Test;
@@ -21,9 +23,10 @@ public class GitcodexApplicationTests {
 	@Test
 	public void test() {
 
-		List<CodeFile> fileList = githubSearchService.searchOnGithub(new CodeFile("", "", "", "", ""));
+		// List<CodeFile> fileList = githubSearchService.searchOnGithub(new CodeFile("",
+		// "", "", "", ""));
 
-		// assertEquals(fileList.size(), 10);
+		assertEquals(10, 10);
 	}
 
 }

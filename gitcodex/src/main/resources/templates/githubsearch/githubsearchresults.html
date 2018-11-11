@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{view.index.title}">Welcome!</title>
+    <title th:text="#{view.index.title}">Resultados</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!--     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" /> -->
 <!--     <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script> -->
 <!--     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script> -->
@@ -13,18 +13,28 @@
 
 <div class="container">
 
-    <h2>Results on github</h2>
+    <h2>Results</h2>
     
-    <!-- List of polls -->
-    <div class="list-group col-xs-12">
-    	<a th:each="file: ${filePage}" 
-    	   th:href="@{/githubsearch}" 
-    	   class="list-group-item col-xs-12">
-    		<span class="col-xs-6" th:text="${file.getFile_name()}"></span>
-			<span class="col-xs-4" th:text="${file.getRepository_url()}"></span>
-			<span class="col-xs-2" th:text="${file.getFile_url()}"></span>
-		</a>
-    </div>
+    <table class="table table-hover">
+		<thead>
+			<tr id="headers" class="header-order">
+				<th id="header-name">File name</th>
+				<th id="header-repository">Repository</th>
+				<th id="header-expand"></th>
+			</tr>
+		</thead>
+	    <tbody>
+			<tr th:each="file : ${filePage}" data-toggle="collapse">
+				<td>
+				  <a th:href="${file.getFile_url()}">
+				    <div style="height:100%;width:100%" th:text="${file.getFile_name()}">filename</div>
+				  </a>
+				</td>
+				<td th:text="${file.getRepository_url()}">repositoryurl</td>
+				<td >Click here to check file content!</td>
+			</tr>
+	    </tbody>
+	</table>
 
        	<!-- Pagination Bar -->
 <!-- 		<div th:if="${not #lists.isEmpty(filePage)}"> -->
