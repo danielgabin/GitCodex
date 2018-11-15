@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{view.index.title}">Resultados</title>
+    <title>Resultados</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<!--     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" /> -->
-<!--     <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script> -->
-<!--     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link type="text/css" href="css/utils.css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Amaranth" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
 </head>
 <body>
 <!-- <div th:replace="fragments/layout :: header"></div> -->
@@ -15,7 +15,7 @@
 
     <h2>Results</h2>
     
-    <table class="table table-hover">
+    <table class="table table-hover center">
 		<thead>
 			<tr id="headers" class="header-order">
 				<th id="header-name">File name</th>
@@ -30,13 +30,17 @@
 				    <div style="height:100%;width:100%" th:text="${file.getFile_name()}">filename</div>
 				  </a>
 				</td>
-				<td th:text="${file.getRepository_url()}">repositoryurl</td>
+				<td>
+				  <a th:href="${file.getFile_url()}">
+				    <div style="height:100%;width:100%" th:text="${file.getRepository_url()}">repositoryurl</div>
+				  </a>
+				</td>
 				<td>
 				 	<form id="fileReview" name="fileReviewForm" th:action="@{/fileReview}" method="POST">
 						<div>
 							<input type="hidden" name="foundFileId" id="foundFileId" th:value="${file.getId()}"/>
 							<input type="hidden" name="searchedFile" id="searchedFile" th:value="${searchFile}"/>
-							<button type="submit" class="box__button btn">Review!</button>
+							<button type="submit" class="btn btn-color">Review!</button>
 						</div>
 					</form>
 				</td>

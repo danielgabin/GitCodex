@@ -51,6 +51,7 @@ public class GithubSearchController {
 		CodeFile foundFile = githubSearchService.findById(foundFileId);
 		String[] foundFileLines = foundFile.getFile_content().split("\n");
 
+		model.addAttribute("file", foundFile);
 		model.addAttribute("resultMap", githubSearchService.compareFiles(searchedFile, foundFileLines));
 		model.addAttribute("foundFileLinesList", Arrays.asList(foundFileLines));
 
