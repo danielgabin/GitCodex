@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{view.index.title}">Resultados</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!--     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" /> -->
+<!--     <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script> -->
+<!--     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script> -->
+</head>
+<body>
+<!-- <div th:replace="fragments/layout :: header"></div> -->
+
+<div class="container">
+
+    <h2>File review</h2>
+	<div th:if="${not #lists.isEmpty(foundFileLinesList)}"> 
+		<th:block th:each="line,iter: ${foundFileLinesList}">
+			<ul>
+				<li>
+					<div>
+						<div th:if="${line} == null" th:text="'Not'+' '+'available'"></div>
+						<div th:if="${line} != null and ${resultMap.get(iter.getIndex())} == true" style="color:green;" th:text="${line}">	</div>
+						<div th:if="${line} != null and ${resultMap.get(iter.getIndex())} == false" style="color:red;" th:text="${line}">	</div>
+				    </div>
+				</li>
+			</ul>
+		</th:block>
+	</div>
+
+</div>
+</body>
+</html>

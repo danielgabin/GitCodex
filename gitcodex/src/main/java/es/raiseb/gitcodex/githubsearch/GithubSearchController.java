@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +23,7 @@ import es.raiseb.gitcodex.file.CodeFile;
 public class GithubSearchController {
 
 	@Autowired
-	private GithubSerachService githubSearchService;
+	private GithubSearchService githubSearchService;
 
 	public static final String uploadingdir = System.getProperty("user.dir") + "/uploadingdir/";
 
@@ -37,10 +38,23 @@ public class GithubSearchController {
 	public String uploadingPost(Model model, @RequestParam("uploadingFiles") MultipartFile[] uploadingFiles)
 			throws IOException {
 		for (MultipartFile uploadedFile : uploadingFiles) {
-			model.addAttribute("filePage", githubSearchService.searchOnGithub(uploadedFile));
+			String codeFileContent = githubSearchService.parseMultipartFile(uploadedFile);
+			model.addAttribute("filePage", githubSearchService.searchOnGithub(codeFileContent));
+			model.addAttribute("searchFile", codeFileContent);
 		}
-
 		return "githubsearch/githubsearchresults";
+	}
+
+	@RequestMapping(value = "/fileReview", method = RequestMethod.POST)
+	public String fileReview(Model model, @RequestParam("searchedFile") String searchedFile,
+			@RequestParam String foundFileId) throws IOException {
+		CodeFile foundFile = githubSearchService.findById(foundFileId);
+		String[] foundFileLines = foundFile.getFile_content().split("\n");
+
+		model.addAttribute("resultMap", githubSearchService.compareFiles(searchedFile, foundFileLines));
+		model.addAttribute("foundFileLinesList", Arrays.asList(foundFileLines));
+
+		return "githubsearch/fileReview";
 	}
 
 }

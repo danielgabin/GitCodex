@@ -31,7 +31,15 @@
 				  </a>
 				</td>
 				<td th:text="${file.getRepository_url()}">repositoryurl</td>
-				<td >Click here to check file content!</td>
+				<td>
+				 	<form id="fileReview" name="fileReviewForm" th:action="@{/fileReview}" method="POST">
+						<div>
+							<input type="hidden" name="foundFileId" id="foundFileId" th:value="${file.getId()}"/>
+							<input type="hidden" name="searchedFile" id="searchedFile" th:value="${searchFile}"/>
+							<button type="submit" class="box__button btn">Review!</button>
+						</div>
+					</form>
+				</td>
 			</tr>
 	    </tbody>
 	</table>
