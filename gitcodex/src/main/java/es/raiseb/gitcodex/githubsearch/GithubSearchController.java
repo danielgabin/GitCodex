@@ -6,7 +6,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,12 +39,22 @@ public class GithubSearchController {
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
 	public String uploadingPost(Model model, @RequestParam("uploadingFiles") MultipartFile[] uploadingFiles)
 			throws IOException {
-		for (MultipartFile uploadedFile : uploadingFiles) {
-			String codeFileContent = githubSearchService.parseMultipartFile(uploadedFile);
-			model.addAttribute("filePage", githubSearchService.searchOnGithub(codeFileContent));
-			model.addAttribute("searchFile", codeFileContent);
+		if (uploadingFiles.length > 1) {
+			List<String> fileContentList = new ArrayList<String>();
+			for (MultipartFile uploadedFile : uploadingFiles) {
+				String codeFileContent = githubSearchService.parseMultipartFile(uploadedFile);
+				fileContentList.add(codeFileContent);
+			}
+			model.addAttribute("repositoryResult", githubSearchService.searchProjects(fileContentList));
+			return "githubsearch/githubsearchrepositoryresults";
+		} else {
+			for (MultipartFile uploadedFile : uploadingFiles) {
+				String codeFileContent = githubSearchService.parseMultipartFile(uploadedFile);
+				model.addAttribute("filePage", githubSearchService.searchOnGithub(codeFileContent));
+				model.addAttribute("searchFile", codeFileContent);
+			}
+			return "githubsearch/githubsearchresults";
 		}
-		return "githubsearch/githubsearchresults";
 	}
 
 	@RequestMapping(value = "/fileReview", method = RequestMethod.POST)

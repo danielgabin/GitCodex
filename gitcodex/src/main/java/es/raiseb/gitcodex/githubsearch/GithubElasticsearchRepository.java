@@ -11,4 +11,7 @@ public interface GithubElasticsearchRepository extends ElasticsearchRepository<C
 
 	@Query("{\"more_like_this\" : {\"fields\" : [\"file_content\"],\"like\" : [\"?0\"],\"min_term_freq\" : 1,\"min_doc_freq\":1}}")
 	List<CodeFile> findByCodeFileContent(String codeFileContent);
+
+	@Query("{\"more_like_this\" : {\"fields\" : [\"file_content\"],\"like\" : [?0],\"min_term_freq\" : 1,\"min_doc_freq\":1}}	")
+	List<CodeFile> findProjects(String filesContent);
 }

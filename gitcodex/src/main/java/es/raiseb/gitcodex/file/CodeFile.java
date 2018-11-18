@@ -17,7 +17,7 @@ public class CodeFile {
 	@Field(type = FieldType.Text)
 	private String file_url;
 
-	@Field(type = FieldType.Text)
+	@Field(type = FieldType.Text, fielddata = true)
 	private String repository_url;
 
 	@Field(type = FieldType.Text)

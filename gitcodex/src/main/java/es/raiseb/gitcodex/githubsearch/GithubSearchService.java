@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ public class GithubSearchService {
 	@Autowired
 	GithubElasticsearchRepository elasticRepository;
 
+	@Autowired
+	GithubSearchProjectRepository elasticProjectRepository;
+
 	public static final String uploadingdir = System.getProperty("user.dir") + "/uploadingdir/";
 
 	public String parseMultipartFile(MultipartFile uploadedFile) throws IOException {
@@ -33,11 +37,6 @@ public class GithubSearchService {
 		stream.read(bytes, 0, n);
 
 		return new String(bytes, StandardCharsets.UTF_8);
-	}
-
-	@Transactional
-	public List<CodeFile> searchOnGithub(String uploadedFile) throws IOException {
-		return elasticRepository.findByCodeFileContent(StringEscapeUtils.escapeJava(uploadedFile));
 	}
 
 	public List<Boolean> compareFiles(String searchedFile, String[] foundFileLines) throws IOException {
@@ -57,6 +56,22 @@ public class GithubSearchService {
 
 	public CodeFile findById(String id) {
 		return elasticRepository.findById(id).get();
+	}
+
+	@Transactional
+	public List<CodeFile> searchOnGithub(String uploadedFile) throws IOException {
+		return elasticRepository.findByCodeFileContent(StringEscapeUtils.escapeJava(uploadedFile));
+	}
+
+	public List<String> searchProjects(List<String> uploadedFiles) throws IOException {
+		String[] uploadedFilesArray = new String[uploadedFiles.size()];
+		int i = 0;
+		for (String uploadedFile : uploadedFiles) {
+			uploadedFilesArray[i] = StringEscapeUtils.escapeJava(uploadedFile);
+			i++;
+		}
+
+		return elasticProjectRepository.findProjects(uploadedFilesArray);
 	}
 
 }
