@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.List;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,12 +30,14 @@ public class GithubSearchService {
 	@Autowired
 	GithubSearchProjectRepository elasticProjectRepository;
 
+	private static final int PAGE_NUM_ELEMENTS = 10;
+
 	public static final String uploadingdir = System.getProperty("user.dir") + "/uploadingdir/";
 
 	public String parseMultipartFile(MultipartFile uploadedFile) throws IOException {
 		File file = new File(uploadingdir + uploadedFile.getOriginalFilename());
 		uploadedFile.transferTo(file);
-		ByteArrayInputStream stream = new ByteArrayInputStream(uploadedFile.getBytes());
+		ByteArrayInputStream stream = new ByteArrayInputStream(Files.readAllBytes(file.toPath()));
 		int n = stream.available();
 		byte[] bytes = new byte[n];
 		stream.read(bytes, 0, n);
@@ -59,8 +65,9 @@ public class GithubSearchService {
 	}
 
 	@Transactional
-	public List<CodeFile> searchOnGithub(String uploadedFile) throws IOException {
-		return elasticRepository.findByCodeFileContent(StringEscapeUtils.escapeJava(uploadedFile));
+	public Page<CodeFile> searchOnGithub(String uploadedFile, int page) throws IOException {
+		return elasticRepository.findByCodeFileContent(StringEscapeUtils.escapeJava(uploadedFile),
+				new PageRequest(page, PAGE_NUM_ELEMENTS));
 	}
 
 	public List<String> searchProjects(List<String> uploadedFiles) throws IOException {
