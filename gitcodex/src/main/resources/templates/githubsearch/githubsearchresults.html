@@ -1,66 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="#{view.index.title}">Welcome!</title>
+    <title>Resultados</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<!--     <link href="../../../resources/css/core.css" rel="stylesheet" media="screen" th:href="@{/resources/css/core.css}" /> -->
-<!--     <script src="../../../resources/js/jquery.min.js" th:src="@{/resources/js/jquery.min.js}"></script> -->
-<!--     <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link type="text/css" href="css/utils.css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Amaranth" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
 </head>
 <body>
 <!-- <div th:replace="fragments/layout :: header"></div> -->
 
 <div class="container">
 
-    <h2>Results on github</h2>
+    <h2>Results</h2>
     
-    <!-- List of polls -->
-    <div class="list-group col-xs-12">
-    	<a th:each="file: ${filePage}" 
-    	   th:href="@{/githubsearch}" 
-    	   class="list-group-item col-xs-12">
-    		<span class="col-xs-6" th:text="${file.getFile_name()}"></span>
-			<span class="col-xs-4" th:text="${file.getRepository_url()}"></span>
-			<span class="col-xs-2" th:text="${file.getFile_url()}"></span>
-		</a>
-    </div>
+    <table class="table table-hover center">
+		<thead>
+			<tr id="headers" class="header-order">
+				<th id="header-name">File name</th>
+				<th id="header-repository">Repository</th>
+				<th id="header-expand"></th>
+			</tr>
+		</thead>
+	    <tbody>
+			<tr th:each="file : ${filePage}" data-toggle="collapse">
+				<td>
+				  <a th:href="${file.getFile_url()}">
+				    <div style="height:100%;width:100%" th:text="${file.getFile_name()}">filename</div>
+				  </a>
+				</td>
+				<td>
+				  <a th:href="${file.getFile_url()}">
+				    <div style="height:100%;width:100%" th:text="${file.getRepository_url()}">repositoryurl</div>
+				  </a>
+				</td>
+				<td>
+				 	<form id="fileReview" name="fileReviewForm" th:action="@{/fileReview}" method="POST">
+						<div>
+							<input type="hidden" name="foundFileId" id="foundFileId" th:value="${file.getId()}"/>
+							<input type="hidden" name="searchedFile" id="searchedFile" th:value="${searchFile}"/>
+							<button type="submit" class="btn btn-color">Review!</button>
+						</div>
+					</form>
+				</td>
+			</tr>
+	    </tbody>
+	</table>
 
        	<!-- Pagination Bar -->
-<!-- 		<div th:if="${not #lists.isEmpty(filePage)}"> -->
-<!-- 			<div class="text-center"> -->
-<!-- 				<nav aria-label="Page navigation"> -->
-<!-- 					<ul class="pagination"> -->
-<!-- 						<li -->
-<!-- 							th:class="${not filePage.hasPrevious()}? 'disabled page-item' : 'page-item'"> -->
-<!-- 							<span th:if='${not filePage.hasPrevious()}'>&laquo;</span> <a -->
-<!-- 							class="page-link" th:if='${filePage.hasPrevious()}' -->
-<!-- 							th:href="@{/polls(groupId=${param.groupId}, -->
-<!-- 			        				page=(${filePage.getNumber()}-1))}" -->
-<!-- 							title="Go to previous page">&laquo;</a> -->
-<!-- 						</li> -->
-<!-- 						<li th:each="i : ${#numbers.sequence(1, filePage.getTotalPages())}" -->
-<!-- 							th:class="${i == (filePage.getNumber()+1)}? 'active page-item' : 'page-item'"> -->
-<!-- 							<span th:if='${i == (filePage.getNumber()+1)}' th:text='${i}'>1</span> -->
-<!-- 							<a class="page-link" -->
-<!-- 							th:if='${not (i == (filePage.getNumber()+1))}' -->
-<!-- 							th:href="@{/polls(groupId=${param.groupId}, -->
-<!-- 			       				page=(${i}-1))}"> -->
-<!-- 								<span th:text='${i}'>1</span> -->
-<!-- 						</a> -->
-<!-- 						</li> -->
-<!-- 						<li -->
-<!-- 							th:class="${filePage.hasNext()}? 'page-item' : 'disabled page-item'"> -->
-<!-- 							<span th:if='${not filePage.hasNext()}'>&raquo;</span> <a -->
-<!-- 							class="page-link" th:if='${filePage.hasNext()}' -->
-<!-- 							th:href="@{/polls(groupId=${param.groupId}, -->
-<!-- 			        				page=(${filePage.getNumber()}+1))}" -->
-<!-- 							title='Go to next page'>&raquo;</a> -->
-<!-- 						</li> -->
-<!-- 					</ul> -->
-<!-- 				</nav> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
+ 		<div th:if="${not #lists.isEmpty(filePage)}"> 
+			<div class="text-center">
+				<nav aria-label="Page navigation">
+					<ul class="pagination">
+						<li
+							th:class="${not filePage.hasPrevious()}? 'page-item disabled' : 'page-item'">
+							<span class="page-link" th:if='${not filePage.hasPrevious()}'>&laquo;</span> <a
+							class="page-link" th:if='${filePage.hasPrevious()}'
+							th:href="@{/uploadFile(page=(${filePage.getNumber()}-1))}"
+							title="Go to previous page">&laquo;</a>
+						</li>
+						<li th:each="i : ${#numbers.sequence(pIni, pFin)}"
+							th:class="${i == (filePage.getNumber()+1)}? 'active page-item' : 'page-item'">
+							<span class="page-link" th:if='${i == (filePage.getNumber()+1)}' th:text='${i}'>1</span>
+							<a class="page-link"
+							th:if='${not (i == (filePage.getNumber()+1))}'
+							th:href="@{/uploadFile(page=(${i}-1))}">
+								<span th:text='${i}'>1</span>
+						</a>
+						</li>
+						<li
+							th:class="${filePage.hasNext()}? 'page-item' : 'disabled page-item'">
+							<span class="page-link" th:if='${not filePage.hasNext()}'>&raquo;</span> <a
+							class="page-link" th:if='${filePage.hasNext()}'
+							th:href="@{/uploadFile(page=(${filePage.getNumber()}+1))}"
+							title='Go to next page'>&raquo;</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div> 
     
 <!--     <div th:replace="fragments/layout :: footer"></div> -->
 </div>

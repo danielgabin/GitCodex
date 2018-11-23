@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="en" class="no-js">
+
+<head>
+	<meta charset="utf-8">
+	<title>File Uploading</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	
+	<link rel="canonical" href="https://css-tricks.com/examples/DragAndDropFileUploading/">
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<link type="text/css" href="css/theme.css" rel="stylesheet" />
+	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,400" />
+    <link href="https://fonts.googleapis.com/css?family=Amaranth" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
+
+
+	<!-- remove this if you use Modernizr -->
+	<script>(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);</script>
+
+</head>
+
+<body>
+
+<div class="container" role="main">
+
+	<h1><a href="/article-url"></a></h1>
+
+    <h1>GitCodex</h1>
+
+	<form class="box" id="fileUploadForm" name="uploadingForm" enctype="multipart/form-data" th:action="@{/uploadFile?page=0}" method="POST">
+		<div class="box__input">
+			<svg class="box__icon" xmlns="http://www.w3.org/2000/svg" width="50" height="43" viewBox="0 0 50 43"><path d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z"/></svg>
+			<input type="file" name="uploadingFiles" id="fileInput" class="box__file" data-multiple-caption="{count} files selected" multiple />
+			<label for="fileInput"><strong>Choose a file</strong><span class="box__dragndrop"></span>.</label>
+			<button type="submit" class="box__button btn">Upload</button>
+		</div>
+
+	</form>
+
+
+	<footer>
+		<p><strong>Powered by ®RaiseB.</strong></p>
+	</footer>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+	'use strict';
+
+	;( function( $, window, document, undefined )
+	{
+		// feature detection for drag&drop upload
+
+		var isAdvancedUpload = function()
+			{
+				var div = document.createElement( 'div' );
+				return ( ( 'draggable' in div ) || ( 'ondragstart' in div && 'ondrop' in div ) ) && 'FormData' in window && 'FileReader' in window;
+			}();
+
+
+		// applying the effect for every form
+
+		$( '.box' ).each( function()
+		{
+			var $form		 = $( this ),
+				$input		 = $form.find( 'input[type="file"]' ),
+				$label		 = $form.find( 'label' ),
+				$errorMsg	 = $form.find( '.box__error span' ),
+				$restart	 = $form.find( '.box__restart' ),
+				droppedFiles = false,
+				showFiles	 = function( files )
+				{
+					$label.text( files.length > 1 ? ( $input.attr( 'data-multiple-caption' ) || '' ).replace( '{count}', files.length ) : files[ 0 ].name );
+				};
+
+
+			// automatically submit the form on file select
+			$input.on( 'change', function( e )
+			{
+				showFiles( e.target.files );	
+			});
+
+
+			// drag&drop files if the feature is available
+			if( isAdvancedUpload )
+			{
+				$form
+				.addClass( 'has-advanced-upload' ) // letting the CSS part to know drag&drop is supported by the browser
+				.on( 'drag dragstart dragend dragover dragenter dragleave drop', function( e )
+				{
+					// preventing the unwanted behaviours
+					e.preventDefault();
+					e.stopPropagation();
+				})
+				.on( 'dragover dragenter', function() //
+				{
+					$form.addClass( 'is-dragover' );
+				})
+				.on( 'dragleave dragend drop', function()
+				{
+					$form.removeClass( 'is-dragover' );
+				})
+				.on( 'drop', function( e )
+				{
+					droppedFiles = e.originalEvent.dataTransfer.files; // the files that were dropped
+					showFiles( droppedFiles );
+
+					
+				});
+			}
+
+
+			
+
+
+			// restart the form if has a state of error/success
+
+			$restart.on( 'click', function( e )
+			{
+				e.preventDefault();
+				$form.removeClass( 'is-error is-success' );
+				$input.trigger( 'click' );
+			});
+
+			// Firefox focus bug fix for file input
+			$input
+			.on( 'focus', function(){ $input.addClass( 'has-focus' ); })
+			.on( 'blur', function(){ $input.removeClass( 'has-focus' ); });
+		});
+
+	})( jQuery, window, document );
+
+</script>
+</body>
+
+</html>

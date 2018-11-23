@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resultados</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link type="text/css" href="css/utils.css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Amaranth" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
+</head>
+<body>
+<!-- <div th:replace="fragments/layout :: header"></div> -->
+
+<div class="container">
+
+    <h2>Repository results</h2>
+    
+    <table class="table table-hover center">
+		<thead>
+			<tr id="headers" class="header-order">
+				<th id="header-repository">Repository</th>
+			</tr>
+		</thead>
+	    <tbody>
+			<tr th:each="repository : ${repositoryResult}" data-toggle="collapse">
+				<td>
+				  <a th:href="${repository}">
+				    <div style="height:100%;width:100%" th:text="${repository}">filename</div>
+				  </a>
+				</td>
+			</tr>
+	    </tbody>
+	</table>
+    
+<!--     <div th:replace="fragments/layout :: footer"></div> -->
+</div>
+</body>
+</html>

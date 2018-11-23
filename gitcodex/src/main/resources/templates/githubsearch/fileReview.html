@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>File review</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link type="text/css" href="css/utils.css" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css?family=Amaranth" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Cormorant" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+	<div th:if="${file != null}"> 
+		<h2 th:text="'File review - ' + ${file.getFile_name()}">Filename</h2>
+    </div>
+	<div class="bordered blob-wrapper" th:if="${not #lists.isEmpty(foundFileLinesList)}"> 
+		<table class="highlight tab-size js-file-line-container" data-tab-size="8">
+		   	<tbody>
+		   		<th:block th:each="line,iter: ${foundFileLinesList}">
+			  		<tr>
+		        		<td class="blob-num js-line-number" th:text="${iter.getIndex()}+1"></td>
+		        		<td class="blob-code-inner blob-code" th:if="${line} != null and ${resultMap.get(iter.getIndex())} == true" style="color:green;" th:text="${line}">Line not available</span>&gt;</td>
+		        		<td class="blob-code-inner blob-code" th:if="${line} != null and ${resultMap.get(iter.getIndex())} == false" style="color:red;" th:text="${line}">Line not available</span>&gt;</td>
+		      		</tr>
+	      		</th:block>
+		    </tbody>
+		</table>
+	</div>		    
+</div>
+</body>
+</html>
